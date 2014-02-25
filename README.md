@@ -6,18 +6,21 @@ Example usage:
 import (
 	"github.com/GeertJohan/go.wstext"
 	"github.com/gorilla/websocket"
+	"net/http"
 )
 
-conn, err := websocket.Upgrade(w, r, nil, 1024, 1024)
-if err != nil {
-	// handle error
+func handleWebsocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := websocket.Upgrade(w, r, nil, 1024, 1024)
+	if err != nil {
+		// handle error
+	}
+
+	textconn := wstext.Conn{conn}
+
+	text, err := textconn.ReadText()
+
+	err = textconn.WriteText("Hello, world")
 }
-
-textconn := wstext.Conn{conn}
-
-text, err := textconn.ReadText()
-
-err = textconn.WriteText("Hello, world")
 ```
 
 ### License

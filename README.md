@@ -18,8 +18,20 @@ func handleWebsocket(w http.ResponseWriter, r *http.Request) {
 	textconn := wstext.Conn{conn}
 
 	text, err := textconn.ReadText()
+	if err != nil {
+		if err == wstext.ErrWrongType {
+			// a non-text message was received
+		}
+		// handle error
+	}
 
 	err = textconn.WriteText("Hello, world")
+	if err != nil {
+		// handle error
+	}
+
+	// All original methods on `websocket.Conn` are still available on `wstext.Conn`.
+	textconn.WriteJson(someData)
 }
 ```
 
